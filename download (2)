@@ -1,0 +1,41 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PhoneFrame, TopBar } from "@/components/famio/ui";
+import { mockNotifications } from "@/lib/mock/data";
+import { Bell, Sparkles } from "lucide-react";
+
+export const Route = createFileRoute("/notifications")({ component: Notifications });
+
+function Notifications() {
+  return (
+    <PhoneFrame>
+      <TopBar back={{ to: "/home" }} title="Notifications" />
+      <div className="px-5">
+        {mockNotifications.length === 0 ? (
+          <div className="py-20 text-center">
+            <div className="mx-auto grid h-24 w-24 place-items-center rounded-3xl bg-surface text-4xl shadow-soft">🔔</div>
+            <div className="mt-5 text-base font-bold">All caught up</div>
+            <p className="mt-1 text-xs text-muted-foreground">We'll let you know when something new happens.</p>
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {mockNotifications.map((n) => (
+              <li key={n.id} className={`flex items-start gap-3 rounded-2xl p-4 ${n.unread ? "bg-surface shadow-soft" : "bg-surface-2"}`}>
+                <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${n.type === "offer" ? "bg-coral/15 text-coral" : "bg-navy/10 text-navy"}`}>
+                  {n.type === "offer" ? <Sparkles className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-sm font-bold">{n.title}</span>
+                    {n.unread && <span className="h-2 w-2 shrink-0 rounded-full bg-coral" />}
+                  </div>
+                  <p className="text-xs text-muted-foreground">{n.body}</p>
+                  <div className="mt-1 text-[10px] text-muted-foreground">{n.time}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </PhoneFrame>
+  );
+}

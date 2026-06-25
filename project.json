@@ -1,0 +1,71 @@
+ns
+# Famio Customer App — v1 Plan
+
+A premium mobile-first React app, designed to look and feel like a native iOS/Android app, built so it can later be wrapped with Capacitor for the App Store and Play Store. No backend, no real payments in v1 — every screen is real, data is mocked, and the architecture is ready for real integrations later.
+
+## What you'll get in v1
+
+A complete, clickable Famio customer app covering the full booking journey with the Famio brand (Navy `#142B6F`, Coral `#FF7B72`, Manrope). Mobile viewport only — locked to a phone frame, safe-area aware, no desktop layouts.
+
+### Screens included (v1)
+1. Splash (animated logo + tagline)
+2. Onboarding (3 pages with illustrations)
+3. Phone login + OTP (mock — any 4 digits work)
+4. Profile setup (name, photo, address)
+5. Home (greeting, search, banner, Famio Home + Famio Kids categories, featured providers, trust banner)
+6. Category screen (Famio Home / Famio Kids listings, filters)
+7. Search + filters
+8. Provider profile (photo, trust score, badges, reviews, gallery, calendar)
+9. Booking flow — 8 steps (service → duration → date → slot → address → notes → summary → payment)
+10. Mock payment screen (cards / wallet / cash UI, no real charge)
+11. Booking confirmation (success animation, booking ID)
+12. Active booking (live status, ETA, chat/call buttons)
+13. Completed booking (rate + review)
+14. My Bookings (upcoming / completed / cancelled tabs)
+15. Messages (list + chat UI)
+16. Notifications
+17. Favorites
+18. Profile + settings (addresses, payment methods, family, language, help, logout)
+19. Help Center
+20. Empty, error, and loading states throughout
+
+Bottom tab navigation: Home · Bookings · Messages · Profile.
+
+### Design system
+- Tokens in `src/styles.css`: Famio Navy, Coral, Sky, Mint, Lavender, neutrals — all as semantic tokens (no hardcoded colors in components).
+- Manrope via Google Fonts `<link>` in the root head.
+- Reusable components: Button, Card, Badge, Chip, Input, BottomSheet, Dialog, Snackbar, Rating, ProviderCard, TrustBadge, DatePicker, TimePicker, Calendar, SkeletonLoader.
+- Soft shadows, 16–24px radii, generous spacing, Airbnb/Apple-style restraint.
+- Subtle motion (button press, page transitions, success checks) using existing `tw-animate-css` + small Motion-style transitions.
+
+### What's mocked in v1
+- OTP: any 4 digits succeeds.
+- Providers, bookings, messages, notifications: in-memory mock data.
+- Payment: shows the full Paymob-style UI and a success screen, no real charge.
+- Location picker: static map image + manual address entry.
+
+## What's NOT in v1 (called out for later phases)
+- Real phone OTP (needs Lovable Cloud + SMS provider).
+- Real Paymob integration.
+- Persisted user accounts, bookings, chat (needs Lovable Cloud).
+- Capacitor native build + push/camera/biometrics/Apple Pay/Google Pay wiring.
+- Arabic/RTL (English-only in v1; structure leaves room for `dir="rtl"`).
+
+Each of these is a follow-up I can take on once v1 is approved.
+
+## Technical notes
+- Stack stays on the current TanStack Start + Tailwind v4 setup. Routes live under `src/routes/` (e.g. `/`, `/onboarding`, `/login`, `/otp`, `/home`, `/category/$id`, `/provider/$id`, `/book/$providerId`, `/booking/$id`, `/bookings`, `/messages`, `/messages/$id`, `/notifications`, `/favorites`, `/profile`, `/help`).
+- Mock data in `src/lib/mock/` (providers, bookings, messages).
+- Auth/profile state in a small Zustand store persisted to `localStorage` so the flow survives reloads.
+- Mobile viewport: app shell capped at `max-w-md` with safe-area padding (`env(safe-area-inset-*)`), `viewport-fit=cover`, `apple-mobile-web-app-capable`. Preview will be switched to mobile.
+- Capacitor-ready: no use of `window`-only APIs at module scope; navigation via TanStack Router (deep-link friendly); media inputs and geolocation use standard web APIs that Capacitor plugins shim transparently later.
+
+## How we'll work
+v1 is large — I'll build it in this order so you can review as it grows:
+1. Design tokens + shell + splash + onboarding + login/OTP + profile setup.
+2. Home + category + provider profile + search.
+3. Booking flow + payment + confirmation + active/completed booking.
+4. Bookings list + messages + notifications + favorites + profile + help.
+5. Polish pass: empty/error/loading states, microinteractions, mobile chrome.
+
+After v1 is approved we can layer on Lovable Cloud (real auth + DB), Paymob, and the Capacitor native wrap.
